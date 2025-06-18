@@ -16,3 +16,8 @@ def contact(request):
 
 def show_task(request):
     return HttpResponse("This is show path")
+
+def show_specific_task(request,id):
+    print("ID",id)
+    print("Id Type",type(id))
+    return HttpResponse (f"This is dynamic urls {id}")
