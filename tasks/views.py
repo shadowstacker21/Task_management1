@@ -3,21 +3,15 @@ from django.http import HttpResponse
 
 # Create your views here.
 
-def home(request):
-    # Work with database
-    # Transform data
-    # Data pass
-    # HTTP response or Json response
-    return HttpResponse ("Welcome to the task management project")
+def manager_dashboard(request):
+    return render(request,"dashboard/manager-dashboard.html")
 
+def user_dashboard(request):
+    return render(request,"dashboard/user_dashboard.html")
 
-def contact(request):
-    return HttpResponse("This is contact page")
-
-def show_task(request):
-    return HttpResponse("This is show path")
-
-def show_specific_task(request,id):
-    print("ID",id)
-    print("Id Type",type(id))
-    return HttpResponse (f"This is dynamic urls {id}")
+def test(request):
+    context={
+        "names":["Alamin","Amirul","Jahidul","Programmer"],
+        "age":20,
+    }
+    return render(request,"test.html",context)
