@@ -8,8 +8,16 @@
 <body>
     <div>
         <ul>
-            {% for task in tasks  %}
-                <li>{{task.status}}</li>
+            {% for emp in tasks  %}
+                <li>
+                    <p>{{emp.name}}</p>
+                    <p>{{emp.email}}</p>
+                    {% for task in emp.tasks.all %}
+                      <p>{{task.title}}</p>
+                      
+                    {% endfor %}
+                    
+                </li>
             {% endfor %}
         </ul>
     </div>

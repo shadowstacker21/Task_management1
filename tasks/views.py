@@ -1,7 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from tasks.forms import TaskForm,TaskModelForm
-from tasks.models import Employee,Task
+from tasks.models import Employee,Task,TaskDetail,Project
+from datetime import date
+# OR relation use korar jnno eita import korte hobe
+from django.db.models import Q
 
 # Create your views here.
 
@@ -53,6 +56,45 @@ def create_task(request):
     return render(request,"task_form.html",context)
 
 def view_task(request):
-    #retrive all data from tasks model
-    tasks=Task.objects.all()
-    return render(request,"show_task.html",{"tasks":tasks})
+    """#retrive all data from tasks model"""
+    # tasks=Task.objects.all()
+    # return render(request,"show_task.html",{"tasks":tasks})
+
+
+
+    """ #jekono akta kisur vitti te mane"PENDING" nam a jotogula project ase sb view kora"""
+    # task=Task.objects.filter(status="PENDING")
+    # return render(request,"show_task.html",{'tasks':task})
+
+    """#show the task which due_date today"""
+    # tasks=Task.objects.filter(due_date=date.today())
+    # return render(request,"show_task.html",{'tasks':tasks})
+
+
+    """Show the task whose priority is not Low"""
+    # tasks=TaskDetail.objects.exclude(priority="L")
+    # return render(request,"show_task.html",{'tasks':tasks})
+
+    """show the task that contain 'paper' AND status=pending """
+    # tasks=Task.objects.filter(title__icontains='c',status="PENDING")
+    # return render(request,"show_task.html",{'tasks':tasks})
+
+
+    """show the task which are status=Pending OR status=In_Progress"""
+    # tasks=Task.objects.filter(Q(status="PENDING") | Q(status="IN_PROGRESS"))
+    # return render(request,"show_task.html",{'tasks':tasks})
+    
+
+    """select_related (ForeignKey,OneToOne field) 2ta table join korar query"""
+    # tasks=TaskDetail.objects.select_related('task').all() for One To One
+    # for One to many or foreign key
+    # tasks=Task.objects.select_related('project').all()   
+
+    """prefetch_related (reverse foreign key,many to many)"""  
+    # tasks=Project.objects.prefetch_related('task_set').all() 
+    # for many to many
+    # tasks=Task.objects.prefetch_related('assigned_to').all()   
+    tasks=Employee.objects.prefetch_related('tasks').all()
+    return render(request,"show_task.html",{'tasks':tasks})
+
+   
