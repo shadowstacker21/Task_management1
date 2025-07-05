@@ -31,6 +31,7 @@ class Task(models.Model):
      
     #  For Many To Many RelationShip
     assigned_to=models.ManyToManyField(Employee,related_name='tasks')
+    
 
     title=models.CharField(max_length=250)
     description=models.TextField()
@@ -58,7 +59,7 @@ class TaskDetail(models.Model):
         on_delete=models.CASCADE,
         related_name='details'
         )
-    assigned_to=models.CharField(max_length=100)
+    # assigned_to=models.CharField(max_length=100)
     priority=models.CharField(max_length=1,choices=PRIORITY_OPTIONS,default=LOW)
     notes =models.TextField(blank=True,null=True)
 
