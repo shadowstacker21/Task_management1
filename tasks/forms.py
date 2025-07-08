@@ -19,11 +19,15 @@ class TaskForm(forms.Form):
         self.fields['assigned_to'].choices=[(emp.id,emp.name) for emp in employees]
 
 class StyledFormMixin:
+    def __init__(self,*args, **kwargs):
+           super().__init__(*args, **kwargs)
+           self.apply_styled_widgets()
     """Mixing to apply style to form field"""
-    default_classes="border-2 rounded-lg shadow-sm w-full p-3 border-gray-300 "
+    default_classes="border-2 rounded-lg shadow-sm   w-1/2 p-3 border-gray-300 "
     "focus:outline-none focus:border-rose-300 focus:ring-rose-500"
 
     def apply_styled_widgets(self):
+        
         for field_name,field in self.fields.items():
             if isinstance(field.widget,forms.TextInput):
                 field.widget.attrs.update({
@@ -92,10 +96,7 @@ class TaskModelForm(StyledFormMixin,forms.ModelForm):
         #         'class': "space-y-2",
         #     }),
         # }    
-    """Using Mixing Widget"""
-    def __init__(self,*args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_styled_widgets()
+
 
 
 class TaskDetailModelForm(StyledFormMixin,forms.ModelForm):
@@ -103,8 +104,5 @@ class TaskDetailModelForm(StyledFormMixin,forms.ModelForm):
         model=TaskDetail
         fields=['priority','notes']
         
-    def __init__(self,*args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_styled_widgets()
 
          
