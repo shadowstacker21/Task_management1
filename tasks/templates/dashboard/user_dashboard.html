@@ -1,3 +1,4 @@
+
 {% extends "dashboard/dashboard.html" %}
 
  {% block title %}User DashBoard{% endblock title %}
@@ -8,29 +9,23 @@
        {% comment %} <!-- 1st div --> {% endcomment %}
         <div class="bg-white p-6 rounded-xl shadow-sm">
             <div class="text-2xl font-semibold mb-2">Today's Tasks</div>
-            <div class="flex justify-between items-start">
+           {% now "Y-m-d" as today_date %}
+
+        {% for task in tasks %}
+            {% if task.created_at|date:"Y-m-d" == today_date %}
+                <div class="flex justify-between items-start">
                 <div class="flex justify-relative items-center gap-2">
                     <div class="w-2 h-2 bg-green-500 rounded-full "></div>
-                    <div><span>Complete project propsal</span></div>
+                    
+                    <div><span><a href="{% url 'user-details' task.id %}">{{task.title}}</a></span></div>
+                     
                 </div>
-                <div class="text-gray-500">High</div>
-            </div>
+                <div class="text-gray-500">{{task.details.get_priority_display|upper}}</div>
+             </div>
+              {% endif %}
+    {% endfor %}
              
-            <div class="flex justify-between items-start">
-                <div class="flex justify-relative items-center gap-2">
-                    <div class="w-2 h-2 bg-yellow-500 rounded-full "></div>
-                    <div><span>Review team updates</span></div>
-                </div>
-                <div class="text-gray-500">Normal</div>
-            </div>
             
-            <div class="flex justify-between items-start">
-                <div class="flex justify-relative items-center gap-2">
-                    <div class="w-2 h-2 bg-blue-500 rounded-full "></div>
-                    <div><span>Prepare for client meeting</span></div>
-                </div>
-                <div class="text-gray-500">Low</div>
-            </div>
              
         </div>
 
@@ -44,46 +39,26 @@
                 <div>CREATED AT</div>
             </div>
             {% comment %} <!-- ST --> {% endcomment %}
-             <div class="grid grid-cols-4 p-4 gap-4 items-center">
-            <div class="flex items-center gap-1 mb-2 ">
-                <div class="w-2 h-2 rounded-full bg-green-500"></div>
-                <div><span class="">Test Low Task</span></div>
-            </div>
-            <div><span class="px-3 py-1 text-sm rounded-sm bg-blue-50 text-blue-600">Low</span></div>
-            <div class="flex -space-x-2 mx-4">
-                <div class="w-8 h-8 rounded-full bg-blue-500 flex justify-center items-center text-white border-2 border-white font-medium text-sm">CA</div>
-                <div class="w-8 h-8 rounded-full bg-green-500 flex justify-center items-center text-white border-2 border-white font-medium text-sm">JS</div>
-                <div class="w-8 h-8 rounded-full bg-orange-500 flex justify-center items-center text-white border-2 border-white font-medium text-sm">B</div>
-            </div>
-            <div class="text-gray-500">9 months ago</div>
-         </div>
+             
+         {% for task in tasks %}
          <div class="grid grid-cols-4 p-4 gap-4 items-center">
             <div class="flex items-center gap-1 mb-2 ">
                 <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
-                <div><span class="">Test Task</span></div>
+                <div><span class=""><a href="{% url 'user-details' task.id %}">{{task.title}}</a></span></div>
             </div>
-            <div><span class="px-3 py-1 text-sm rounded-sm bg-gray-50 text-gray-600  ">Normal</span></div>
-            <div class="flex -space-x-2 mx-4">
-                <div class="w-8 h-8 rounded-full bg-red-500 flex justify-center items-center text-white border-2 border-white font-medium text-sm">AJ</div>
-                <div class="w-8 h-8 rounded-full bg-purple-500 flex justify-center items-center text-white border-2 border-white font-medium text-sm">EV</div>
-                <div class="w-8 h-8 rounded-full bg-orange-500 flex justify-center items-center text-white border-2 border-white font-medium text-sm">B</div>
-            </div>
-            <div class="text-gray-500">9 months ago</div>
+            <div><span class="px-3 py-1 text-sm rounded-sm bg-gray-50 text-gray-600  ">{{task.details.get_priority_display}}</span></div>
+           <div class="flex -space-x-2">
+                  {% for emp in task.assigned_to.all %}
+                      <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center
+                     justify-center text-white text-sm border-2 border-white">{{emp.first_name|slice:':1'}}</div>
+                  {% endfor %}
+                    
+                </div>
+            <div class="text-gray-500">{{task.created_at|timesince}}</div>
          </div>
-         <div class="grid grid-cols-4 p-4 gap-4 items-center">
-            <div class="flex items-center gap-1 mb-2 ">
-                <div class="w-2 h-2 rounded-full bg-red-500"></div>
-                <div><span class="">Test Task</span></div>
-            </div>
-            <div><span class="px-3 py-1 text-sm rounded-sm bg-red-50 text-red-600">High</span></div>
-            <div class="flex -space-x-2 mx-4">
-                <div class="w-8 h-8 rounded-full bg-blue-500 flex justify-center items-center text-white border-2 border-white font-medium text-sm">CA</div>
-                <div class="w-8 h-8 rounded-full bg-green-500 flex justify-center items-center text-white border-2 border-white font-medium text-sm">JS</div>
-                <div class="w-8 h-8 rounded-full bg-red-500 flex justify-center items-center text-white border-2 border-white font-medium text-sm">AJ</div>
-                <div class="w-8 h-8 rounded-full bg-orange-500 flex justify-center items-center text-white border-2 border-white font-medium text-sm">B</div>
-            </div>
-            <div class="text-gray-500">9 months ago</div>
-         </div>
+         
+         {% endfor %}
+        
          </div>
 
     </div> 
